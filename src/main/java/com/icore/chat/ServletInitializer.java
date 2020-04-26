@@ -1,5 +1,6 @@
-package com.example.chat;
+package com.icore.chat;
 
+import com.icore.ChatApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
