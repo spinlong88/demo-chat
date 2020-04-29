@@ -2,14 +2,14 @@ package com.icore.web;
 
 import com.icore.model.UserModel;
 import com.icore.service.UserService;
-import com.icore.util.FastJsonUtils;
+import com.icore.util.FastJsonUtil;
 import com.icore.util.MicroLogFactory;
 import com.icore.util.MicroLogUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 
 @RestController
@@ -18,12 +18,26 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+    //private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private static final MicroLogUtil log = MicroLogFactory.getLooger();
 
+    @RequestMapping(value="/getUserList")
+    public List<UserModel> getUserList(){
+       List<UserModel> userModelList = userService.getUserList();
+        log.info("UserController#getUserList userModelList={}", FastJsonUtil.convertObjectToJSON(userModelList));
+        return userModelList;
+    }
+
     @RequestMapping(value="/getUser")
-    public void getUser(){
-        userService.getUser();
+    public UserModel getUser(){
+       UserModel userModel = userService.getUser();
+        log.info("UserController#getUserList userModel={}", FastJsonUtil.convertObjectToJSON(userModel));
+        return userModel;
+    }
+
+    @RequestMapping(value="/deleteUser")
+    public void deleteUser(){
+        userService.dealeteUser(new Long(32));
     }
 
     @RequestMapping(value="/addUser")
@@ -33,11 +47,7 @@ public class UserController {
         userModel.setUsername("赖茂龙");
         userService.addUser(userModel);
 
-        logger.trace("trace");
-        logger.debug("debug");
-        logger.warn("warn");
-        log.info("UserController#addUser user={},age={}", FastJsonUtils.convertObjectToJSON(userModel),userModel.getAge());
-        log.error("error");
+        log.info("UserController#addUser user={},age={}", FastJsonUtil.convertObjectToJSON(userModel),userModel.getAge());
     }
 
 

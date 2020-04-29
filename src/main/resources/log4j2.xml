@@ -2,8 +2,8 @@
 
 <Configuration status="WARN" monitorInterval="1800">   <!-- debug="true" xmlns:log4j="http://jakarta.apache.org/log4j/"-->
     <properties>
-        <property name="LOG_HOME">logs/kg</property>
-        <property name="FILE_NAME">kg</property>
+        <property name="LOG_HOME">logs/log</property>
+        <property name="FILE_NAME">log</property>
     </properties>
 
     <Appenders>

@@ -8,3 +8,6 @@ spring:
     username: root
     password: sea123
 
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+
