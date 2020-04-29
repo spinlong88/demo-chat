@@ -18,18 +18,19 @@ public class UserService {
     private static final MicroLogUtil log = MicroLogFactory.getLooger();
 
     public List<UserModel> getUserList(){
-        log.info(" UserService  getUserList  success !");
         return userModelMapper.getUserList();
     }
 
-    public UserModel getUser(){
-        log.info(" UserService  getUser  success !");
-        return userModelMapper.getUser();
+    public UserModel getUser(Long id){
+        return userModelMapper.getUser(id);
     }
 
     public void addUser(UserModel userModel){
         userModelMapper.addUser(userModel);
-        log.info(" UserService  addUser  success in user={}!", FastJsonUtil.convertObjectToJSON(userModel));
+    }
+
+    public void updateUser(UserModel userModel){
+        userModelMapper.updateUser(userModel);
     }
 
     public void dealeteUser(Long id){
@@ -38,7 +39,6 @@ public class UserService {
         }catch(Exception ex){
             ex.printStackTrace();
         }
-        log.info(" UserService  deleteUser  success in id={}!", id);
     }
 
 

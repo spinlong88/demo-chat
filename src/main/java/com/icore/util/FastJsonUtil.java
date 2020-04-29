@@ -31,7 +31,7 @@ public class FastJsonUtil {
     };
 
 
-    public static String convertObjectToJSON(Object object) {
+    public static String toJSON(Object object) {
         return JSON.toJSONString(object, config, features);
     }
 
@@ -101,13 +101,10 @@ public class FastJsonUtil {
      * @param clazz
      * @return
      */
-    public static Object convertJsonToObject(String jsonData, Class<?> clazz) {
+    public static Object toObject(String jsonData, Class<?> clazz) {
         return JSONObject.parseObject(jsonData, clazz);
     }
 
-    public static Object convertJSONToObject(String content, Class<?> clazz) {
-        return JSONObject.parseObject(content, clazz);
-    }
 
     /**
      * 将map转化为string

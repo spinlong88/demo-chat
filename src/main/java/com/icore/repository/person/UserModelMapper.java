@@ -11,12 +11,15 @@ public interface UserModelMapper {
     public List<UserModel> getUserList() ;
 
     //获取用户名单
-    public UserModel getUser() ;
+    public UserModel getUser(Long id) ;
 
     //根据id删除用户
     public void deleteUser(long id)throws Exception;
 
     //新增用户
     public void addUser(UserModel userModel);
+
+    //修改用户
+    public void updateUser(UserModel userModel);
 
 }

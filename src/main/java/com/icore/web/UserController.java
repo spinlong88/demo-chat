@@ -5,6 +5,7 @@ import com.icore.service.UserService;
 import com.icore.util.FastJsonUtil;
 import com.icore.util.MicroLogFactory;
 import com.icore.util.MicroLogUtil;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,20 +25,21 @@ public class UserController {
     @RequestMapping(value="/getUserList")
     public List<UserModel> getUserList(){
        List<UserModel> userModelList = userService.getUserList();
-        log.info("UserController#getUserList userModelList={}", FastJsonUtil.convertObjectToJSON(userModelList));
+        log.info("UserController#getUserList userModelList={}", FastJsonUtil.toJSON(userModelList));
         return userModelList;
     }
 
     @RequestMapping(value="/getUser")
-    public UserModel getUser(){
-       UserModel userModel = userService.getUser();
-        log.info("UserController#getUserList userModel={}", FastJsonUtil.convertObjectToJSON(userModel));
+    public UserModel getUser(Long id){
+       UserModel userModel = userService.getUser(id);
+        log.info(" UserService  getUser  in userModel={}!", FastJsonUtil.toJSON(userModel));
         return userModel;
     }
 
     @RequestMapping(value="/deleteUser")
-    public void deleteUser(){
+    public void deleteUser(UserModel userModel){
         userService.dealeteUser(new Long(32));
+        log.info(" UserService  deleteUser  in userModel={}!", FastJsonUtil.toJSON(userModel));
     }
 
     @RequestMapping(value="/addUser")
@@ -46,8 +48,13 @@ public class UserController {
         userModel.setAge(32);
         userModel.setUsername("赖茂龙");
         userService.addUser(userModel);
+        log.info("UserController#addUser user={},age={}", FastJsonUtil.toJSON(userModel),userModel.getAge());
+    }
 
-        log.info("UserController#addUser user={},age={}", FastJsonUtil.convertObjectToJSON(userModel),userModel.getAge());
+    @RequestMapping(value="/updateUser")
+    public void updateUser(UserModel userModel){
+        userService.updateUser(userModel);
+        log.info("UserController#updateUser user={}", FastJsonUtil.toJSON(userModel));
     }
 
 
