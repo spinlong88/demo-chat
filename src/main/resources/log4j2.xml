@@ -26,7 +26,7 @@
                     <!--!Note: 这里的age必须和filePattern协调, 后者是精确到HH, 这里就要写成xH, xd就不起作用
                     另外, 数字最好>2, 否则可能造成删除的时候, 最近的文件还处于被占用状态,导致删除不成功!-->
                     <!--7天-->
-                    <IfLastModified age="168H" />
+                    <IfLastModified age="2d" />
                 </Delete>
             </DefaultRolloverStrategy>
         </RollingRandomAccessFile>
