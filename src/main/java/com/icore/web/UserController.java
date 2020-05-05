@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 
@@ -47,6 +49,9 @@ public class UserController {
         UserModel userModel = new UserModel();
         userModel.setAge(32);
         userModel.setUsername("赖茂龙");
+        userModel.setBirthday(new Date());
+        userModel.setMobile("15815576007");
+        userModel.setSalary(new BigDecimal("00"));
         userService.addUser(userModel);
         log.info("UserController#addUser user={},age={}", FastJsonUtil.toJSON(userModel),userModel.getAge());
     }

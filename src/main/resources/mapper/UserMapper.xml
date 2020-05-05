@@ -17,7 +17,7 @@
         delete from user where id =#{id}
     </delete>
     <insert id="addUser" parameterType="com.icore.model.UserModel">
-        insert into user(<include refid="BASE_COLUMN_LIST"></include>)values(#{id},#{username},#{age})
+        insert into user(<include refid="BASE_COLUMN_LIST"></include>)values(#{username},#{age},#{mobile},#{salary},#{birthday})
     </insert>
 
     <update id="updateUser" parameterType="com.icore.model.UserModel">
