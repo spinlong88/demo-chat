@@ -3,7 +3,11 @@
 <mapper namespace="com.icore.repository.person.UserModelMapper">
 
     <sql id="BASE_COLUMN_LIST">
-        username,age,mobile,salary,birthday
+        id,username,age,mobile,salary,birthday,create_time,update_time
+    </sql>
+
+    <sql id="BASE_COLUMN_INSERT">
+        username,age,mobile,salary,birthday,create_time,update_time
     </sql>
 
     <select id="getUserList" resultType="com.icore.model.UserModel">
@@ -17,16 +21,37 @@
         delete from user where id =#{id}
     </delete>
     <insert id="addUser" parameterType="com.icore.model.UserModel">
-        insert into user(<include refid="BASE_COLUMN_LIST"></include>)values(#{username},#{age},#{mobile},#{salary},#{birthday})
+        insert into user(<include refid="BASE_COLUMN_INSERT"></include>)
+        values(
+        #{username ,jdbcType=VARCHAR},
+        #{age ,jdbcType=INTEGER},
+        #{mobile ,jdbcType=VARCHAR},
+        #{salary ,jdbcType=DECIMAL},
+        #{birthday, jdbcType=DATE},
+        now(),
+        now()
+        )
     </insert>
 
     <update id="updateUser" parameterType="com.icore.model.UserModel">
         update user t
-        set t.username = #{username,jdbcType=VARCHAR},
+        set
+        <if test="username !=null and username !='' ">
+            t.username = #{username,jdbcType=VARCHAR},
+        </if>
+        <if test="age !=null">
             t.age = #{age,jdbcType=INTEGER},
+        </if>
+        <if test="mobile !=null and mobile !='' ">
             t.mobile = #{mobile,jdbcType=VARCHAR},
+        </if>
+        <if test="salary !=null ">
             t.salary = #{salary,jdbcType=DECIMAL},
-            t.brithdate = #{brithdate, jdbcType=DATE}
+        </if>
+        <if test="birthday !=null ">
+            t.birthday = #{birthday,jdbcType=DATE},
+        </if>
+            t.update_time = now()
             where id =#{id}
     </update>
 </mapper>

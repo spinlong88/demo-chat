@@ -3,8 +3,8 @@ package com.icore.exception;
 import com.icore.util.CommonUtil;
 
 public enum ExceptionCode {
-  SUCCESS(0,"success"),
-    Failure(-1,"fail");
+  SUCCESS(0,"SUCCESS"),
+    ERROR(-1,"ERROR");
 
 
   private Integer code;

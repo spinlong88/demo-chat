@@ -9,13 +9,13 @@ import java.util.Date;
 
 @Data
 @ApiModel
-public class UserModel {
+public class UserModel extends BaseModel{
     @ApiModelProperty(value = "id")
     public Long id;
     @ApiModelProperty(value = "姓名")
     public String username;
     @ApiModelProperty(value = "年龄")
-    public int age;
+    public Integer age;
     @ApiModelProperty(value = "手机")
     public String mobile;
     @ApiModelProperty(value = "薪水")
