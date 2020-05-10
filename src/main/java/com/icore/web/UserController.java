@@ -1,8 +1,11 @@
 package com.icore.web;
 
+import com.icore.exception.BusinessException;
+import com.icore.exception.ExceptionCode;
 import com.icore.model.UserModel;
 import com.icore.service.UserService;
 import com.icore.util.FastJsonUtil;
+import com.icore.util.LogPrintUtil;
 import com.icore.util.MicroLogFactory;
 import com.icore.util.MicroLogUtil;
 import com.icore.vo.common.PlatformResponse;
@@ -25,13 +28,21 @@ public class UserController {
     //private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private static final MicroLogUtil log = MicroLogFactory.getLooger();
 
-
     @ApiOperation(value = APIInfo.User.ApiName.USER_GETLIST ,notes="查看用户列表")
     @RequestMapping(value="/getUserList",method = RequestMethod.POST)
     public PlatformResponse<List<UserModel>> getUserList(){
-       List<UserModel> userModelList = userService.getUserList();
-        log.info("UserController#getUserList userModelList={}", FastJsonUtil.toJSON(userModelList));
-        return PlatformResponse.success(userModelList);
+        try{
+            List<UserModel> userModelList = userService.getUserList();
+            log.info("UserController#getUserList userModelList={}", FastJsonUtil.toJSON(userModelList));
+            return PlatformResponse.success(userModelList);
+        }catch(BusinessException e){
+            log.error(" UserController#getUserList exception={} ",LogPrintUtil.logExceptionTack(e));
+            return PlatformResponse.failure(e.getCode(),e.getMsg());
+        }catch(Exception e){
+            log.error(" UserController#getUserList exception={} ", LogPrintUtil.logExceptionTack(e));
+            return PlatformResponse.failure(ExceptionCode.ERROR);
+        }
+
     }
 
 

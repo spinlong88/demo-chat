@@ -116,8 +116,24 @@
             <artifactId>springfox-swagger-ui</artifactId>
             <version>2.9.2</version>
         </dependency>
-
         <!-- 引入swagger end-->
+
+        <!-- redis  start-->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>2.9.0</version>
+        </dependency>
+        <!-- redis  end-->
+
+        <!-- google guava start-->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>20.0</version>
+        </dependency>
+        <!-- google guava end-->
+
 
         <dependency>
             <groupId>mysql</groupId>
