@@ -134,6 +134,13 @@
         </dependency>
         <!-- google guava end-->
 
+        <!-- 配置文件自动映射 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+
 
         <dependency>
             <groupId>mysql</groupId>

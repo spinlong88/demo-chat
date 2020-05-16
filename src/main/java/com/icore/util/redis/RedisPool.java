@@ -16,12 +16,13 @@ import java.util.concurrent.ConcurrentHashMap;
 public class RedisPool {
 
     private static final MicroLogUtil log = MicroLogFactory.getLooger();
-    private static RedisConfig redisConfig =  (RedisConfig) SpringContexUtil.getBean("redisConfg");
+    private static RedisConfig redisConfig =  (RedisConfig) SpringContexUtil.getBean(RedisConfig.class);
     public static  Map<String,RedisFacade> jedisMap = new ConcurrentHashMap<>();
 
 
     public static RedisFacade getInstance(String key){
-        if(jedisMap.containsKey(key)){
+        System.out.println(jedisMap.get(key)+"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+jedisMap.containsKey(key));
+        if(!jedisMap.containsKey(key)){
             initJedis(key);
         }
         return jedisMap.get(key);
@@ -32,12 +33,13 @@ public class RedisPool {
         if(jedisMap.containsKey(key)){
             return;
         }
+        System.out.println("++++++++++++++++++++++++++");
         String host = redisConfig.getHost() == null?"127.0.0.1":redisConfig.getHost();
-        String password = redisConfig.getPassword() == null?"a2833554":redisConfig.getPassword();
+        String password = redisConfig.getPassword() == null?"":redisConfig.getPassword();
         int timeout = redisConfig.getTimeout() == null?2000:Integer.valueOf(redisConfig.getTimeout());
         String port = redisConfig.getPort() == null?"6379":redisConfig.getPort();
         int maxActivte = redisConfig.getMaxActivte() ==null?300:Integer.valueOf(redisConfig.getMaxActivte());
-        int maxWait = redisConfig.getMaxWait() == null?300:Integer.valueOf(redisConfig.getMaxWait());
+        long maxWait = redisConfig.getMaxWait() == null?300L:Long.valueOf(redisConfig.getMaxWait());
         int maxIdle = redisConfig.getMaxIdle() == null?0:Integer.valueOf(redisConfig.getMaxIdle());
         int minIdle = redisConfig.getMinIdle() == null?0:Integer.valueOf(redisConfig.getMinIdle());
         boolean testOnBorrow = redisConfig.getTestOnBorrow() == null?false:Boolean.valueOf(redisConfig.getTestOnBorrow());
@@ -65,7 +67,7 @@ public class RedisPool {
             JedisCluster cluster = new JedisCluster(nodes,timeout,timeout,maxActivte,password,config);
             jedisMap.put(key,new JedisClusterProxy(cluster));
         }else{
-            JedisPool jedisPool = new JedisPool(config,host,Integer.valueOf(port),timeout,true);
+            JedisPool jedisPool = new JedisPool(config,host,Integer.valueOf(port));
             jedisMap.put(key, new JedisProxy(jedisPool));
         }
         log.info(" init jedisPool successful ");

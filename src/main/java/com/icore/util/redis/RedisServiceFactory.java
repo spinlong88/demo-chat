@@ -6,7 +6,7 @@ public class RedisServiceFactory {
 
     }
 
-    public static RedisService getRedisFactory(String key){
+    public static RedisService getRedisService(String key){
         return new RedisService(RedisPool.getInstance(key));
     }
 

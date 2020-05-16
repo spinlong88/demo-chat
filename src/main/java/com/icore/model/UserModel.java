@@ -9,7 +9,7 @@ import java.util.Date;
 
 @Data
 @ApiModel
-public class UserModel extends BaseModel{
+public class UserModel extends BaseModel {
     @ApiModelProperty(value = "id")
     public Long id;
     @ApiModelProperty(value = "姓名")
@@ -22,6 +22,5 @@ public class UserModel extends BaseModel{
     public BigDecimal salary;
     @ApiModelProperty(value = "生日")
     public Date birthday;
-
 
 }

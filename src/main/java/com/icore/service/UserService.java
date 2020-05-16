@@ -33,9 +33,9 @@ public class UserService {
         userModelMapper.updateUser(userModel);
     }
 
-    public void dealeteUser(Long id){
+    public void delUser(Long id){
         try {
-            userModelMapper.deleteUser(id);
+            userModelMapper.delUser(id);
         }catch(Exception ex){
             ex.printStackTrace();
         }

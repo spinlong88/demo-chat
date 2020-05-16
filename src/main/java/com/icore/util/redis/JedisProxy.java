@@ -14,6 +14,26 @@ public class JedisProxy extends RedisFacade{
        return jedisPool.getResource();
     }
 
+    @Override
+    public void setString(String key,String value) {
+        getJedis(jedisPool).set(key,value);
+    }
+
+    @Override
+    public String getString(String key) {
+        return getJedis(jedisPool).get(key);
+    }
+
+    @Override
+    public Long expire(String key, int seconds) {
+        return getJedis(jedisPool).expire(key,seconds);
+    }
+
+    @Override
+    public boolean exists(String key) {
+        return getJedis(jedisPool).exists(key);
+    }
+
     public void close(){
     }
 

@@ -10,14 +10,25 @@
         username,age,mobile,salary,birthday,create_time,update_time
     </sql>
 
-    <select id="getUserList" resultType="com.icore.model.UserModel">
+    <resultMap id="BaseResultMap" type="com.icore.model.UserModel">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="username" property="username" jdbcType="VARCHAR"/>
+        <result column="age" property="age" jdbcType="INTEGER"/>
+        <result column="mobile" property="mobile" jdbcType="VARCHAR"/>
+        <result column="salary" property="salary" jdbcType="DECIMAL"/>
+        <result column="birthday" property="birthday" jdbcType="DATE"/>
+        <result column="create_time" property="createTime" jdbcType="DATE"/>
+        <result column="update_time" property="updateTime" jdbcType="DATE"/>
+    </resultMap>
+
+    <select id="getUserList" resultMap="BaseResultMap">
         select <include refid="BASE_COLUMN_LIST"></include> from user
     </select>
-    <select id="getUser" resultType="com.icore.model.UserModel">
+    <select id="getUser" resultMap="BaseResultMap">
         select <include refid="BASE_COLUMN_LIST"></include>
         from user where id =#{id}
     </select>
-    <delete id="deleteUser" parameterType="Long">
+    <delete id="delUser" parameterType="Long">
         delete from user where id =#{id}
     </delete>
     <insert id="addUser" parameterType="com.icore.model.UserModel">

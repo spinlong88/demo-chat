@@ -14,7 +14,7 @@ public interface UserModelMapper {
     public UserModel getUser(Long id) ;
 
     //根据id删除用户
-    public void deleteUser(long id)throws Exception;
+    public void delUser(long id)throws Exception;
 
     //新增用户
     public void addUser(UserModel userModel);

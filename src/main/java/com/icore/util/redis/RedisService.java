@@ -1,5 +1,6 @@
 package com.icore.util.redis;
 
+import com.icore.util.LogPrintUtil;
 import com.icore.util.MicroLogFactory;
 import com.icore.util.MicroLogUtil;
 
@@ -17,6 +18,34 @@ public class RedisService {
 
     public RedisService(RedisFacade redisFacade){
         this.jedis = redisFacade;
+    }
+
+    public void setString(String key,String value,int seconds,String methodName){
+
+        try{
+            jedis.setString(key,value);
+            if(seconds>0){
+                jedis.expire(key,seconds);
+            }
+        }catch (Exception e){
+            log.error(" redis setString erro e={}", LogPrintUtil.logExceptionTack(e));
+        }finally {
+            release(jedis,false);
+        }
+    }
+
+    public String getString(String key,String methodName) {
+        String value = "";
+        try {
+            if (jedis.exists(key)) {
+                value = jedis.getString(key);
+            }
+        } catch (Exception e) {
+            log.error(" redis setString erro e={}", LogPrintUtil.logExceptionTack(e));
+        } finally {
+            release(jedis, false);
+        }
+        return value;
     }
 
     public void release(RedisFacade jedis,boolean isBroken){

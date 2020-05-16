@@ -8,6 +8,8 @@ import com.icore.util.FastJsonUtil;
 import com.icore.util.LogPrintUtil;
 import com.icore.util.MicroLogFactory;
 import com.icore.util.MicroLogUtil;
+import com.icore.util.comConst.RedsiConst;
+import com.icore.util.redis.RedisServiceFactory;
 import com.icore.vo.common.PlatformResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,6 +34,10 @@ public class UserController {
     @RequestMapping(value="/getUserList",method = RequestMethod.POST)
     public PlatformResponse<List<UserModel>> getUserList(){
         try{
+
+            RedisServiceFactory.getRedisService(RedsiConst.REDIS_POOL).setString("fcuk","asd",86400,"getUserList");
+            String sae = RedisServiceFactory.getRedisService(RedsiConst.REDIS_POOL).getString("fcuk","getUserList");
+            System.out.println(sae);
             List<UserModel> userModelList = userService.getUserList();
             log.info("UserController#getUserList userModelList={}", FastJsonUtil.toJSON(userModelList));
             return PlatformResponse.success(userModelList);
@@ -70,10 +76,10 @@ public class UserController {
     }
 
     @ApiOperation(value = APIInfo.User.ApiName.USER_DELETE, notes="删除用户")
-    @RequestMapping(value="/deleteUser",method = RequestMethod.POST)
+    @RequestMapping(value="/delUser",method = RequestMethod.POST)
     public PlatformResponse deleteUser(@RequestBody UserModel userModel){
-        userService.dealeteUser(userModel.getId());
-        log.info(" UserService  deleteUser  in userModel={}!", FastJsonUtil.toJSON(userModel));
+        userService.delUser(userModel.getId());
+        log.info(" UserService  delUser  in userModel={}!", FastJsonUtil.toJSON(userModel));
         return PlatformResponse.success();
     }
 
