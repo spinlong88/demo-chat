@@ -7,6 +7,9 @@ import com.icore.util.MicroLogFactory;
 import com.icore.util.MicroLogUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.beans.Transient;
 import java.util.List;
 
 @Service
@@ -39,6 +42,12 @@ public class UserService {
         }catch(Exception ex){
             ex.printStackTrace();
         }
+    }
+
+    @Transactional
+    public void testTrans()throws Exception{
+            userModelMapper.delUser(new Long(6));
+            int sea= 9/0;
     }
 
 

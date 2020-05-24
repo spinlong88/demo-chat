@@ -31,8 +31,8 @@ public class FastJsonUtil {
     };
 
 
-    public static String toJSON(Object object) {
-        return JSON.toJSONString(object, config, features);
+    public static <T> String toJSON(T object) {
+        return JSON.toJSONString(object);
     }
 
     public static String toJSONNoFeatures(Object object) {
@@ -101,7 +101,7 @@ public class FastJsonUtil {
      * @param clazz
      * @return
      */
-    public static Object toObject(String jsonData, Class<?> clazz) {
+    public static <T> T toObject(String jsonData, Class<T> clazz) {
         return JSONObject.parseObject(jsonData, clazz);
     }
 

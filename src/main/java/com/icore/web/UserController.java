@@ -4,6 +4,7 @@ import com.icore.exception.BusinessException;
 import com.icore.exception.ExceptionCode;
 import com.icore.model.UserModel;
 import com.icore.service.UserService;
+import com.icore.task.async.UserAsync;
 import com.icore.util.FastJsonUtil;
 import com.icore.util.LogPrintUtil;
 import com.icore.util.MicroLogFactory;
@@ -13,6 +14,7 @@ import com.icore.util.redis.RedisServiceFactory;
 import com.icore.vo.common.PlatformResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
@@ -27,6 +29,9 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    UserAsync userAsync;
+
     //private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private static final MicroLogUtil log = MicroLogFactory.getLooger();
 
@@ -34,10 +39,11 @@ public class UserController {
     @RequestMapping(value="/getUserList",method = RequestMethod.POST)
     public PlatformResponse<List<UserModel>> getUserList(){
         try{
-
             RedisServiceFactory.getRedisService(RedsiConst.REDIS_POOL).setString("fcuk","asd",86400,"getUserList");
             String sae = RedisServiceFactory.getRedisService(RedsiConst.REDIS_POOL).getString("fcuk","getUserList");
+            //userAsync.async();
             System.out.println(sae);
+            //userService.testTrans();
             List<UserModel> userModelList = userService.getUserList();
             log.info("UserController#getUserList userModelList={}", FastJsonUtil.toJSON(userModelList));
             return PlatformResponse.success(userModelList);
@@ -58,6 +64,7 @@ public class UserController {
         log.info(" UserService  getUser  in userModel={}!", FastJsonUtil.toJSON(userModel));
         UserModel queryUserModel = userService.getUser(userModel.getId());
         log.info(" UserService  getUser  in queryUserModel={}!", FastJsonUtil.toJSON(queryUserModel));
+        BeanUtils.copyProperties(queryUserModel,userModel);
         return PlatformResponse.success(queryUserModel);
     }
 

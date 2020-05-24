@@ -1,121 +1,90 @@
 package com.icore.util;
 
-import java.io.UnsupportedEncodingException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-
-import javax.crypto.BadPaddingException;
+import java.util.Base64;
+import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.KeyGenerator;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-/**
- * Created by pc on 2018/5/15.
- */
 
-public class AESUtil {
+
+public class AESUtil{
+
+    private static final String IV_STRING = "2281698499864041";//默认的加密算法
 
     /**
-     * 加密
+     * AES 加密操作
      *
-     * @param content 需要加密的内容
-     * @param password  加密密码
-     * @return
+     * @param content 待加密内容
+     * @param key 加密密钥
+     * @return 返回Base64转码后的加密数据
      */
-    public static byte[] encrypt(String content, String password) {
+    public static Optional<String> encrypt(String content, String key) {
         try {
-            KeyGenerator kgen = KeyGenerator.getInstance("AES");
-            kgen.init(128, new SecureRandom(password.getBytes()));
-            SecretKey secretKey = kgen.generateKey();
-            byte[] enCodeFormat = secretKey.getEncoded();
-            SecretKeySpec key = new SecretKeySpec(enCodeFormat, "AES");
-            Cipher cipher = Cipher.getInstance("AES");// 创建密码器
-            byte[] byteContent = content.getBytes("utf-8");
-            cipher.init(Cipher.ENCRYPT_MODE, key);// 初始化
-            byte[] result = cipher.doFinal(byteContent);
-            return result; // 加密
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
+           byte[] byteContent = content.getBytes("UTF-8");
+           byte[] enCodeFormat = key.getBytes("UTF-8");
+           SecretKeySpec SecretKeySpec = new SecretKeySpec(enCodeFormat,"AES");
+           byte[] initParam = IV_STRING.getBytes();
+            IvParameterSpec ivParameterSpec = new IvParameterSpec(initParam);
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+            cipher.init(Cipher.ENCRYPT_MODE,SecretKeySpec,ivParameterSpec);
+            byte[] encryptedBytes = cipher.doFinal(byteContent);
+            Base64.Encoder encoder = Base64.getEncoder();
+            return Optional.ofNullable(encoder.encodeToString(encryptedBytes));
+        } catch (Exception ex) {
+            Logger.getLogger(AESUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return null;
+        return Optional.empty();
     }
 
-
-
-    /**解密
-     * @param content  待解密内容
-     * @param password 解密密钥
+    /**
+     * AES 解密操作
+     *
+     * @param content
+     * @param key
      * @return
      */
-    public static byte[] decrypt(byte[] content, String password) {
+    public static Optional<String> decrypt(String content, String key) {
+
         try {
-            KeyGenerator kgen = KeyGenerator.getInstance("AES");
-            kgen.init(128, new SecureRandom(password.getBytes()));
-            SecretKey secretKey = kgen.generateKey();
-            byte[] enCodeFormat = secretKey.getEncoded();
-            SecretKeySpec key = new SecretKeySpec(enCodeFormat, "AES");
-            Cipher cipher = Cipher.getInstance("AES");// 创建密码器
-            cipher.init(Cipher.DECRYPT_MODE, key);// 初始化
-            byte[] result = cipher.doFinal(content);
-            return result; // 加密
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
+            Base64.Decoder decoder = Base64.getDecoder();
+            byte[] encryptedBytes = decoder.decode(content);
+            byte[] enCodeFormat = key.getBytes();
+            SecretKeySpec secretKey = new SecretKeySpec(enCodeFormat,"AES");
+            byte[] initParam = IV_STRING.getBytes();
+            IvParameterSpec ivParameterSpec = new IvParameterSpec(initParam);
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+            cipher.init(Cipher.DECRYPT_MODE,secretKey,ivParameterSpec);
+            byte[] result = cipher.doFinal(encryptedBytes);
+            return Optional.ofNullable(new String(result,"UTF-8"));
+
+        } catch (Exception ex) {
+            Logger.getLogger(AESUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return null;
+
+        return Optional.empty();
     }
 
-
-
-    /**将二进制转换成16进制
-     * @param buf
-     * @return
-     */
-    public static String parseByte2HexStr(byte buf[]) {
-        StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < buf.length; i++) {
-            String hex = Integer.toHexString(buf[i] & 0xFF);
-            if (hex.length() == 1) {
-                hex = '0' + hex;
+    public static String getRandStr(int num){
+        String strs = "Aq12BCDE!w3aFGzH7eIsZKLrMx0NO4^tdPQcRSy6fT%UvVW5ubg$hSYn8ijmZ#9o@plS321M982L?_+3";
+        StringBuffer buff = new StringBuffer();
+        for(int i=1;i<=num;i++){
+            char str = strs.charAt((int)(Math.random()*80));
+            if(buff.toString().contains(String.valueOf(str))){
+                i = i-1;
+                continue;
             }
-            sb.append(hex.toUpperCase());
+            buff.append(str);
         }
-        return sb.toString();
+        return buff.toString();
     }
-    /**将16进制转换为二进制
-     * @param hexStr
-     * @return
-     */
-    public static byte[] parseHexStr2Byte(String hexStr) {
-        if (hexStr.length() < 1)
-            return null;
-        byte[] result = new byte[hexStr.length()/2];
-        for (int i = 0;i< hexStr.length()/2; i++) {
-            int high = Integer.parseInt(hexStr.substring(i*2, i*2+1), 16);
-            int low = Integer.parseInt(hexStr.substring(i*2+1, i*2+2), 16);
-            result[i] = (byte) (high * 16 + low);
-        }
-        return result;
+
+
+    public static void main(String[] args) {
+       String str = getRandStr(16);
+       System.out.println(str);
+
     }
 }
