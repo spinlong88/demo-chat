@@ -9,7 +9,7 @@ import com.icore.util.FastJsonUtil;
 import com.icore.util.LogPrintUtil;
 import com.icore.util.MicroLogFactory;
 import com.icore.util.MicroLogUtil;
-import com.icore.util.comConst.RedsiConst;
+import com.icore.util.comConst.RedisConst;
 import com.icore.util.redis.RedisServiceFactory;
 import com.icore.vo.common.PlatformResponse;
 import io.swagger.annotations.Api;
@@ -39,8 +39,8 @@ public class UserController {
     @RequestMapping(value="/getUserList",method = RequestMethod.POST)
     public PlatformResponse<List<UserModel>> getUserList(){
         try{
-            RedisServiceFactory.getRedisService(RedsiConst.REDIS_POOL).setString("fcuk","asd",86400,"getUserList");
-            String sae = RedisServiceFactory.getRedisService(RedsiConst.REDIS_POOL).getString("fcuk","getUserList");
+            RedisServiceFactory.getRedisService(RedisConst.REDIS_CENTER).setString("fcuk","asd",86400,"getUserList");
+            String sae = RedisServiceFactory.getRedisService(RedisConst.REDIS_CENTER).getString("fcuk");
             //userAsync.async();
             System.out.println(sae);
             //userService.testTrans();

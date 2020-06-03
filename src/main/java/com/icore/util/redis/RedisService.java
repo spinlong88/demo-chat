@@ -34,7 +34,7 @@ public class RedisService {
         }
     }
 
-    public String getString(String key,String methodName) {
+    public String getString(String key) {
         String value = "";
         try {
             if (jedis.exists(key)) {

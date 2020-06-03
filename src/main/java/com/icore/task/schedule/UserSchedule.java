@@ -19,11 +19,11 @@ public class UserSchedule {
     UserService userService;
     private static final MicroLogUtil log = MicroLogFactory.getLooger();
 
-    @Scheduled(cron="* 0/10 *  * * ? ")
+    @Scheduled(cron="* 1 *  * * ? ")
     public void execute(){
         System.out.println("!!!!!!!!!!!!!!!!!!!");
         List<UserModel> userModelList = userService.getUserList();
-        log.info("UserController#getUserList userModelList={}", FastJsonUtil.toJSON(userModelList));
+        log.info("UserSchedule#execute userModelList={}", FastJsonUtil.toJSON(userModelList));
 
     }
 
