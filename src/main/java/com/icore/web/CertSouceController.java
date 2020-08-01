@@ -51,7 +51,7 @@ public class CertSouceController {
             String token = Md5Util.md5(UUIDUtil.getUUID()+System.currentTimeMillis());
             TokenHelper.tokenToRedis(token,userModel);
             userModel = TokenHelper.ofTokenOnly(token).orElse(null);
-            System.out.println(token+"!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            System.out.println("token="+token+"!!!!!!!!!!!!!!!!!!!!!!!!!!");
             log.info("CertSouceController#decryptCert user={}", FastJsonUtil.toJSON(userModel));
             return PlatformResponse.success(userModel);
         }catch(BusinessException e){

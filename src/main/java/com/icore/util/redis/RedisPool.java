@@ -21,7 +21,6 @@ public class RedisPool {
 
 
     public static RedisFacade getInstance(String key){
-        System.out.println(jedisMap.get(key)+"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+jedisMap.containsKey(key));
         if(!jedisMap.containsKey(key)){
             initJedis(key);
         }
@@ -33,7 +32,6 @@ public class RedisPool {
         if(jedisMap.containsKey(key)){
             return;
         }
-        System.out.println("++++++++++++++++++++++++++");
         String host = redisConfig.getHost() == null?"127.0.0.1":redisConfig.getHost();
         String password = redisConfig.getPassword() == null?"":redisConfig.getPassword();
         int timeout = redisConfig.getTimeout() == null?2000:Integer.valueOf(redisConfig.getTimeout());

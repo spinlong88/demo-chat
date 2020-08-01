@@ -8,14 +8,14 @@
 
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %class{36}:%M(%L)] - %msg%xEx%n"/>
+            <PatternLayout pattern="[%X{traceId} %d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %class{36}:%M(%L)] - %msg%xEx%n"/>
         </Console>
 
         <RollingRandomAccessFile name="MyFile"
                                  fileName="${LOG_HOME}/${FILE_NAME}.log"
                                  filePattern="${LOG_HOME}/$${date:yyyy-MM}/${FILE_NAME}-%d{yyyy-MM-dd-HH}-%i.log">
             <PatternLayout
-                    pattern="[%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %class{36}:%M(%L)] - %msg%xEx%n"/>
+                    pattern="[%X{traceId} %d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %class{36}:%M(%L)] - %msg%xEx%n"/>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="1"/>      <!--每1小时/分/... 生成一个文件, 时间依据filePattern的配置-->
                 <SizeBasedTriggeringPolicy size="5 MB"/>
