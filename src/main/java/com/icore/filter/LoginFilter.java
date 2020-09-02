@@ -18,7 +18,7 @@ public class LoginFilter implements Filter {
         HttpServletRequest httpServletRequest= (HttpServletRequest)servletRequest;
         HttpServletResponse httpServletResponse= (HttpServletResponse)servletResponse;
 
-        System.out.println(httpServletRequest.getRequestURI()+"++++++++++++++++++++++++");
+        System.out.println("过滤器打印:"+httpServletRequest.getRequestURI()+"++++++++++++++++++++++++");
         filterChain.doFilter(servletRequest,servletResponse);
 
     }

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Future;
 
 
 @Api(value="/test", tags=APIInfo.User.USER_INFO)
@@ -32,7 +33,6 @@ public class UserController {
     @Autowired
     UserAsync userAsync;
 
-    //private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private static final MicroLogUtil log = MicroLogFactory.getLooger();
 
     @ApiOperation(value = APIInfo.User.ApiName.USER_GETLIST ,notes="查看用户列表")
@@ -43,6 +43,7 @@ public class UserController {
             String sae = RedisServiceFactory.getRedisService(RedisConst.REDIS_CENTER).getString("fcuk");
             //userAsync.async();
             System.out.println(sae);
+            //事务
             //userService.testTrans();
             List<UserModel> userModelList = userService.getUserList();
             log.info("UserController#getUserList userModelList={}", FastJsonUtil.toJSON(userModelList));
@@ -61,11 +62,20 @@ public class UserController {
     @ApiOperation(value = APIInfo.User.ApiName.USER_GET, notes="查看用户")
     @RequestMapping(value="/getUser",method = RequestMethod.POST)
     public PlatformResponse<UserModel> getUser(@RequestBody UserModel userModel){
-        log.info(" UserService  getUser  in userModel={}!", FastJsonUtil.toJSON(userModel));
+        try{
+        Future<String> sad = userAsync.doTask1();
+        log.info(" 接口打印：UserService  getUser  in userModel={}!", FastJsonUtil.toJSON(userModel));
         UserModel queryUserModel = userService.getUser(userModel.getId());
-        log.info(" UserService  getUser  in queryUserModel={}!", FastJsonUtil.toJSON(queryUserModel));
+        log.info(" 接口打印：UserService  getUser  out userModel={}!", FastJsonUtil.toJSON(queryUserModel));
         BeanUtils.copyProperties(queryUserModel,userModel);
         return PlatformResponse.success(queryUserModel);
+        }catch(BusinessException e){
+            log.error(" UserController#getUser exception={} ",LogPrintUtil.logExceptionTack(e));
+            return PlatformResponse.failure(e.getCode(),e.getMsg());
+        }catch(Exception e){
+            log.error(" UserController#getUser exception={} ", LogPrintUtil.logExceptionTack(e));
+            return PlatformResponse.failure(ExceptionCode.ERROR);
+        }
     }
 
     @ApiOperation(value = APIInfo.User.ApiName.USER_ADD, notes="增加用户")
