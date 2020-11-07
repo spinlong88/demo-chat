@@ -27,7 +27,7 @@ public class LogAspect {
 
     private static final MicroLogUtil log = MicroLogFactory.getLooger();
 
-    @Pointcut("execution(* com.icore.web..*.*(..))")
+    @Pointcut("execution(* com.icore.web..*.*(..)) && @annotation(com.icore.aop.LogAnnotation)")
     public void executeService(){}
 
 

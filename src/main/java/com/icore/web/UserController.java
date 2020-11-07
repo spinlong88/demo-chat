@@ -1,5 +1,6 @@
 package com.icore.web;
 
+import com.icore.aop.LogAnnotation;
 import com.icore.exception.BusinessException;
 import com.icore.exception.ExceptionCode;
 import com.icore.model.UserModel;
@@ -61,6 +62,7 @@ public class UserController {
 
     @ApiOperation(value = APIInfo.User.ApiName.USER_GET, notes="查看用户")
     @RequestMapping(value="/getUser",method = RequestMethod.POST)
+    @LogAnnotation
     public PlatformResponse<UserModel> getUser(@RequestBody UserModel userModel){
         try{
         Future<String> sad = userAsync.doTask1();
