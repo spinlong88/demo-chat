@@ -8,6 +8,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.JSONLibDataFormatSerializer;
 import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.icore.sensitive.ValueDesensitizeFilter;
 
 /**
  * fastjson工具类
@@ -31,8 +32,12 @@ public class FastJsonUtil {
     };
 
 
+    public static <T> String toDesensitizedJSON(T object) {
+        return JSON.toJSONString(object, new ValueDesensitizeFilter(), SerializerFeature.DisableCircularReferenceDetect);
+    }
+
     public static <T> String toJSON(T object) {
-        return JSON.toJSONString(object);
+      return JSON.toJSONString(object);
     }
 
     public static String toJSONNoFeatures(Object object) {
@@ -77,7 +82,7 @@ public class FastJsonUtil {
 
     /**
      * 将string转化为序列化的json字符串
-     * @param keyvalue
+     * @param text
      * @return
      */
     public static Object textToJson(String text) {

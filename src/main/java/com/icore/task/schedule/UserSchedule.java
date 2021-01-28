@@ -19,9 +19,8 @@ public class UserSchedule {
     UserService userService;
     private static final MicroLogUtil log = MicroLogFactory.getLooger();
 
-    @Scheduled(cron="* 1 *  * * ? ")
+    //@Scheduled(cron="* 10 *  * * ? ")
     public void execute(){
-        System.out.println("!!!!!!!!!!!!!!!!!!!");
         List<UserModel> userModelList = userService.getUserList();
         log.info("UserSchedule#execute userModelList={}", FastJsonUtil.toJSON(userModelList));
 

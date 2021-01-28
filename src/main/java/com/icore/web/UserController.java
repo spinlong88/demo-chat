@@ -1,6 +1,9 @@
 package com.icore.web;
 
+import com.google.common.collect.ImmutableMap;
 import com.icore.aop.LogAnnotation;
+import com.icore.demo.netty.httpClient.client.LongConnectionNettyClient;
+import com.icore.demo.netty.httpClient.factory.LongConnectionNettyClientFactory;
 import com.icore.exception.BusinessException;
 import com.icore.exception.ExceptionCode;
 import com.icore.model.UserModel;
@@ -20,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Future;
 
@@ -41,9 +45,9 @@ public class UserController {
     public PlatformResponse<List<UserModel>> getUserList(){
         try{
             RedisServiceFactory.getRedisService(RedisConst.REDIS_CENTER).setString("fcuk","asd",86400,"getUserList");
-            String sae = RedisServiceFactory.getRedisService(RedisConst.REDIS_CENTER).getString("fcuk");
+            String redisValue = RedisServiceFactory.getRedisService(RedisConst.REDIS_CENTER).getString("fcuk");
             //userAsync.async();
-            System.out.println(sae);
+            System.out.println(redisValue);
             //事务
             //userService.testTrans();
             List<UserModel> userModelList = userService.getUserList();
@@ -109,6 +113,40 @@ public class UserController {
         log.info("UserController#updateUser user={}", FastJsonUtil.toJSON(userModel));
         return PlatformResponse.success();
     }
+
+    @ApiOperation(value = APIInfo.User.ApiName.USER_UPDATE, notes="修改用户")
+    @RequestMapping(value="/testNetty",method = RequestMethod.GET)
+    public PlatformResponse testNetty(String host){
+        String url = "http://192.168.3.31:8080/center/getUserList";
+        LongConnectionNettyClient connectionNettyClient = LongConnectionNettyClientFactory.getOrCreateLongConnectionNettyClient(url);
+        HashMap<String,String> head = new HashMap<>();
+        head.put("content-type","application/json");
+
+        ImmutableMap.Builder<String,Object> body = ImmutableMap.builder();
+        body.put("","");
+
+        PlatformResponse userList = connectionNettyClient.post(url,body,head,PlatformResponse.class);
+        log.info("UserController#testNetty userList={}", FastJsonUtil.toJSON(userList));
+        return PlatformResponse.success(userList);
+    }
+
+    @ApiOperation(value = APIInfo.User.ApiName.USER_UPDATE, notes="修改用户")
+    @RequestMapping(value="/testNetty2",method = RequestMethod.GET)
+    public PlatformResponse testNetty2(String host){
+        String url = "http://192.168.3.31:8080/center/getUser";
+        LongConnectionNettyClient connectionNettyClient = LongConnectionNettyClientFactory.getOrCreateLongConnectionNettyClient(url);
+        HashMap<String,String> head = new HashMap<>();
+        head.put("content-type","application/json");
+
+        ImmutableMap.Builder<String,Object> builder = ImmutableMap.builder();
+        ImmutableMap<String,Object> body = builder.put("id",new Long(6)).build();
+        PlatformResponse user = connectionNettyClient.post(url,body,head,PlatformResponse.class);
+        log.info("UserController#testNetty2 user={}", FastJsonUtil.toJSON(user));
+        return PlatformResponse.success(user);
+    }
+
+
+
 
 
 }
